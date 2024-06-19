@@ -1,3 +1,4 @@
+import java.awt.event.KeyAdapter;
 import java.awt.BasicStroke;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.AdjustmentEvent;
@@ -13,6 +14,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
     private CircleButton bigButton;
     private boolean isDragging = false;
     private int lineWidth = 1;
+    JLabel labelForMassege = new JLabel();
+
     public void setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
     }
@@ -21,15 +24,18 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         return lineWidth;
     }
 
+
     Paint() {
         setTitle("Paint");
         setSize(1000, 750);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setBackground(Color.white);
+        setForeground(Color.white);
         setLayout(null);
         addMouseMotionListener(this);
 
 
-        JPanel  panel = new JPanel();
+        JPanel panel = new JPanel();
         panel.setBounds(0, 0, getWidth(), 150);
         isDragging = true;
         panel.setBackground(Color.decode("#E6E6FA"));
@@ -63,11 +69,65 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         add(textInstruments);
         panel.add(textInstruments);
 
-        Button bBucket = createButtonKey("F", 40, 40);
-        add(bBucket);
-        panel.add(bBucket);
-        panelKey.add(bBucket);
+        Button bFill = createButtonKey("F", 30, 10);
+        bFill.addActionListener(new ActionListener() {
 
+            public void actionPerformed(ActionEvent e) {
+                getContentPane().setBackground(bigButton.getColor());
+                getContentPane().setForeground(bigButton.getColor());
+                repaint();
+
+            }
+        });
+        add(bFill);
+        panel.add(bFill);
+        panelKey.add(bFill);
+
+        Button bLastik = createButtonKey("L", 90, 10);
+        bLastik.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                color = new Color(237, 237, 237);
+            }
+        });
+        add(bLastik);
+        panel.add(bLastik);
+        panelKey.add(bLastik);
+
+        Button bPencil = createButtonKey("P", 60, 50);
+        bPencil.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                color = Color.BLACK;
+            }
+        });
+        add(bPencil);
+        panel.add(bPencil);
+        panelKey.add(bPencil);
+
+
+        JTextField textField = new JTextField();
+        textField.setBounds(230, 22, 150, 100);
+        add(textField);
+        panel.add(textField);
+
+        Button bText = new Button("Send");
+        bText.setBounds(340, 125, 60, 30);
+        bText.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                labelForMassege.setBounds(50, y, 300, 30);
+                labelForMassege.setFont(new Font("Arial", Font.ITALIC, 18));
+                labelForMassege.setText(textField.getText());
+                panel.add(labelForMassege);
+                y += 40;
+            }
+        });
+        add(bText);
+        panel.add(bText);
+
+        JLabel massage = new JLabel("Text");
+        massage.setFont(new Font("Arial", Font.ITALIC, 15));
+        massage.setBounds(290, 120, 80, 30);
+        add(massage);
+        panel.add(massage);
 
         JLabel textValue = new JLabel("0");
         textValue.setFont(new Font("Arial", Font.ITALIC, 30));
@@ -95,13 +155,13 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         add(textValueValue);
         panel.add(textValueValue);
 
-        JLabel textColor  = new JLabel("Color");
+        JLabel textColor = new JLabel("Color");
         textColor.setFont(new Font("Arial", Font.ITALIC, 15));
         textColor.setBounds(690, 95, 100, 30);
         add(textColor);
         panel.add(textColor);
 
-        JLabel textClear  = new JLabel("Clear");
+        JLabel textClear = new JLabel("Clear");
         textClear.setFont(new Font("Arial", Font.ITALIC, 15));
         textClear.setBounds(912, 95, 100, 30);
         add(textClear);
@@ -110,7 +170,7 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
 
         bigButton = createBigButton();
         add(bigButton);
-      panel.add(bigButton);
+        panel.add(bigButton);
 
         CircleButton bIndigo = createButton(Color.decode("#4B0082"), 630, 25);
         add(bIndigo);
@@ -193,7 +253,7 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         add(bAntiqueWhite);
         panel.add(bAntiqueWhite);
 
-        Button  bClear = new Button("C");
+        Button bClear = new Button("C");
         bClear.setBounds(900, 25, 60, 65);
         bClear.addActionListener(this);
         bClear.setFont(new Font("Arial", Font.BOLD, 40));
@@ -203,6 +263,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
             @Override
             public void actionPerformed(ActionEvent e) {
                 Graphics g = getGraphics();
+                getContentPane().setBackground(new Color(237, 237, 237));
+                labelForMassege.setText("");
                 g.fillRect(0, 0, getWidth(), getHeight());
                 repaint();
             }
@@ -212,6 +274,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
 
         setVisible(true);
     }
+
+
     private CircleButton createButton(Color colorB, int x, int y) { //gpt подсказал , что оказывается так можно делать в JFrame и экономить милионны строк лишних
         isDragging = true;
         CircleButton button = new CircleButton(colorB);
@@ -228,10 +292,11 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         });
         return button;
     }
+
     private Button createButtonKey(String name, int x, int y) {
         isDragging = true;
         Button button = new Button(name);
-        button.setBounds(x , y, 30, 30);
+        button.setBounds(x, y, 30, 30);
         button.addActionListener(this);
         button.setBackground(Color.decode("#D3D3D3"));
         button.setForeground(Color.BLACK);
@@ -254,8 +319,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (!isDragging){
-            Graphics2D g  = (Graphics2D) getGraphics();
+        if (!isDragging) {
+            Graphics2D g = (Graphics2D) getGraphics();
             g.setColor(color);
             if (x != 0 && y != 0) {
                 g.setStroke(new BasicStroke(lineWidth));
@@ -267,6 +332,7 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         }
 
     }
+
     @Override
     public void mouseMoved(MouseEvent e) {
         x = 0;

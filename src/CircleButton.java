@@ -37,5 +37,9 @@ public class CircleButton extends JButton { //ну этот класс гпт н
             int radius = getWidth() / 2;
             return (x - radius) * (x - radius) + (y - radius) * (y - radius) <= radius * radius;
         }
+
+    public Color getColor() {
+        return color;
     }
+}
 
