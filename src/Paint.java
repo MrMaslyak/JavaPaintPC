@@ -1,4 +1,3 @@
-import java.awt.event.KeyAdapter;
 import java.awt.BasicStroke;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.AdjustmentEvent;
@@ -6,6 +5,7 @@ import java.awt.Font;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Paint extends JFrame implements ActionListener, MouseMotionListener {
     Color color = Color.BLACK;
@@ -14,7 +14,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
     private CircleButton bigButton;
     private boolean isDragging = false;
     private int lineWidth = 1;
-    JLabel labelForMassege = new JLabel();
+    private int textY = 160;
+    private ArrayList<JLabel> points = new ArrayList<JLabel>();
 
     public void setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
@@ -105,19 +106,27 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
 
 
         JTextField textField = new JTextField();
-        textField.setBounds(230, 22, 150, 100);
+        textField.setBounds(230, 22, 150, 75);
         add(textField);
         panel.add(textField);
 
         Button bText = new Button("Send");
-        bText.setBounds(340, 125, 60, 30);
+        bText.setBounds(275, 117, 60, 30);
         bText.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                labelForMassege.setBounds(50, y, 300, 30);
-                labelForMassege.setFont(new Font("Arial", Font.ITALIC, 18));
-                labelForMassege.setText(textField.getText());
-                panel.add(labelForMassege);
-                y += 40;
+                String text = textField.getText();
+                textField.setText("");
+                if(!text.isEmpty()){
+                    JLabel labelForMassege = new JLabel();
+                    labelForMassege.setBounds(50, textY, 300, 30);
+                    labelForMassege.setFont(new Font("Arial", Font.ITALIC, 22));
+                    labelForMassege.setText(text);
+                    getContentPane().add(labelForMassege);
+                    points.add(labelForMassege);
+                    textY += 40;
+                    repaint();
+
+                }
             }
         });
         add(bText);
@@ -125,9 +134,11 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
 
         JLabel massage = new JLabel("Text");
         massage.setFont(new Font("Arial", Font.ITALIC, 15));
-        massage.setBounds(290, 120, 80, 30);
+        massage.setBounds(290, 90, 80, 30);
         add(massage);
         panel.add(massage);
+
+
 
         JLabel textValue = new JLabel("0");
         textValue.setFont(new Font("Arial", Font.ITALIC, 30));
@@ -264,7 +275,7 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
             public void actionPerformed(ActionEvent e) {
                 Graphics g = getGraphics();
                 getContentPane().setBackground(new Color(237, 237, 237));
-                labelForMassege.setText("");
+                points.forEach(getContentPane()::remove);
                 g.fillRect(0, 0, getWidth(), getHeight());
                 repaint();
             }
