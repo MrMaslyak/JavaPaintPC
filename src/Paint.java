@@ -14,8 +14,13 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
     private CircleButton bigButton;
     private boolean isDragging = false;
     private int lineWidth = 1;
-    private int textY = 160;
     private ArrayList<JLabel> points = new ArrayList<JLabel>();
+    private int xCoordinat;
+    private int yCoordinat;
+    private JLabel textValueCoordinatX;
+    private JLabel textValueCoordinatY;
+    private JScrollBar scrollBarCoordinatX;
+    private JScrollBar scrollBarCoordinatY;
 
     public void setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
@@ -25,6 +30,21 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         return lineWidth;
     }
 
+    public int getyCoordinat() {
+        return yCoordinat;
+    }
+
+    public void setyCoordinat(int yCoordinat) {
+        this.yCoordinat = yCoordinat;
+    }
+
+    public int getxCoordinat() {
+        return xCoordinat;
+    }
+
+    public void setxCoordinat(int xCoordinat) {
+        this.xCoordinat = xCoordinat;
+    }
 
     Paint() {
         setTitle("Paint");
@@ -104,11 +124,62 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         panel.add(bPencil);
         panelKey.add(bPencil);
 
-
         JTextField textField = new JTextField();
         textField.setBounds(230, 22, 150, 75);
         add(textField);
         panel.add(textField);
+
+        JLabel message = new JLabel("Text");
+        message.setFont(new Font("Arial", Font.ITALIC, 17));
+        message.setBounds(290, 93, 80, 23);
+        add(message);
+        panel.add(message);
+
+        JLabel textCoordinatX = new JLabel("X");
+        textCoordinatX.setFont(new Font("Arial", Font.ITALIC, 12));
+        textCoordinatX.setBounds(238, 133, 20, 20);
+        add(textCoordinatX);
+        panel.add(textCoordinatX);
+
+        textValueCoordinatX = new JLabel("0");
+        textValueCoordinatX.setFont(new Font("Arial", Font.ITALIC, 23));
+        textValueCoordinatX.setBounds(232, 119, 40, 20);
+        add(textValueCoordinatX);
+        panel.add(textValueCoordinatX);
+
+        scrollBarCoordinatX = new JScrollBar(JScrollBar.HORIZONTAL, 0, 0, 0, 999);
+        scrollBarCoordinatX.setBounds(230, 98, 40, 20);
+        scrollBarCoordinatX.addAdjustmentListener(new AdjustmentListener() {
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                xCoordinat = e.getValue();
+                textValueCoordinatX.setText(String.valueOf(xCoordinat));
+            }
+        });
+        add(scrollBarCoordinatX);
+        panel.add(scrollBarCoordinatX);
+
+        JLabel textCoordinatY = new JLabel("Y");
+        textCoordinatY.setFont(new Font("Arial", Font.ITALIC, 12));
+        textCoordinatY.setBounds(360, 133, 20, 20);
+        add(textCoordinatY);
+        panel.add(textCoordinatY);
+
+        textValueCoordinatY = new JLabel("0");
+        textValueCoordinatY.setFont(new Font("Arial", Font.ITALIC, 23));
+        textValueCoordinatY.setBounds(340, 119, 40, 20);
+        add(textValueCoordinatY);
+        panel.add(textValueCoordinatY);
+
+        scrollBarCoordinatY = new JScrollBar(JScrollBar.HORIZONTAL, 0, 0, 0, 999);
+        scrollBarCoordinatY.setBounds(340, 98, 40, 20);
+        scrollBarCoordinatY.addAdjustmentListener(new AdjustmentListener() {
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                yCoordinat = e.getValue();
+                textValueCoordinatY.setText(String.valueOf(yCoordinat));
+            }
+        });
+        add(scrollBarCoordinatY);
+        panel.add(scrollBarCoordinatY);
 
         Button bText = new Button("Send");
         bText.setBounds(275, 117, 60, 30);
@@ -116,28 +187,24 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
             public void actionPerformed(ActionEvent e) {
                 String text = textField.getText();
                 textField.setText("");
-                if(!text.isEmpty()){
+                if (!text.isEmpty()) {
                     JLabel labelForMassege = new JLabel();
-                    labelForMassege.setBounds(50, textY, 300, 30);
+                    labelForMassege.setBounds(xCoordinat, yCoordinat+160, 300, 30);
                     labelForMassege.setFont(new Font("Arial", Font.ITALIC, 22));
                     labelForMassege.setText(text);
                     getContentPane().add(labelForMassege);
                     points.add(labelForMassege);
-                    textY += 40;
+                    xCoordinat = 0;
+                    textValueCoordinatX.setText("0");
+                    textValueCoordinatY.setText("0");
+                    scrollBarCoordinatX.setValue(0);
+                    scrollBarCoordinatY.setValue(0);
                     repaint();
-
                 }
             }
         });
         add(bText);
         panel.add(bText);
-
-        JLabel massage = new JLabel("Text");
-        massage.setFont(new Font("Arial", Font.ITALIC, 15));
-        massage.setBounds(290, 90, 80, 30);
-        add(massage);
-        panel.add(massage);
-
 
 
         JLabel textValue = new JLabel("0");
