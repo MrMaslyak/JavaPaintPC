@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class Paint extends JFrame implements ActionListener, MouseMotionListener {
     Color color = Color.BLACK;
+    Color color2 = Color.BLACK;
+    Color color3 = Color.BLACK;
     private int x;
     private int y;
     private CircleButton bigButton;
@@ -24,6 +26,7 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
     private boolean isDrawingCircle = false;
     private boolean isDrawingRectangle = false;
     private JPanel panelBrush;
+    private JPanel panelKey;
     public void setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
     }
@@ -77,10 +80,10 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         });
         add(panel);
 
-        JPanel panelKey = new JPanel();
+        panelKey = new JPanel();
         panelKey.setBounds(50, 20, 150, 100);
         panelKey.setBackground(Color.decode("#E6E6FA"));
-        panelKey.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        panelKey.setBorder(BorderFactory.createLineBorder(color3, 1));
         panelKey.setLayout(null);
         panelKey.setOpaque(true);
         add(panelKey);
@@ -372,6 +375,7 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
 
         panelBrush = new JPanel();
         panelBrush.setBounds(1000, 10, 150, 130);
+        panelBrush.setBorder(BorderFactory.createLineBorder(color2, 1));
         panelBrush.setLayout(null);
         panelBrush.setOpaque(true);
         add(panelBrush);
@@ -446,9 +450,12 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
                 color = colorB;
                 bigButton.setColor(color);
                 bigButton.repaint();
-                Color color2 = bigButton.getColor();
+                color2 = bigButton.getColor();
                 panelBrush.setBorder(BorderFactory.createLineBorder(color2, 1));
                 panelBrush.repaint();
+                color3 =  bigButton.getColor();
+                panelKey.setBorder(BorderFactory.createLineBorder(color3, 1));
+                panelKey.repaint();
 
             }
         });
