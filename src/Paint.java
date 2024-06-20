@@ -21,7 +21,9 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
     private JLabel textValueCoordinatY;
     private JScrollBar scrollBarCoordinatX;
     private JScrollBar scrollBarCoordinatY;
-
+    private boolean isDrawingCircle = false;
+    private boolean isDrawingRectangle = false;
+    private JPanel panelBrush;
     public void setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
     }
@@ -48,7 +50,7 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
 
     Paint() {
         setTitle("Paint");
-        setSize(1000, 750);
+        setSize(1350, 750);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setBackground(Color.white);
         setForeground(Color.white);
@@ -83,6 +85,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         panelKey.setOpaque(true);
         add(panelKey);
         panel.add(panelKey);
+
+
 
         JLabel textInstruments = new JLabel("Instruments");
         textInstruments.setFont(new Font("Arial", Font.ITALIC, 15));
@@ -247,6 +251,7 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
 
 
         bigButton = createBigButton();
+
         add(bigButton);
         panel.add(bigButton);
 
@@ -350,6 +355,82 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         add(bClear);
         panel.add(bClear);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        panelBrush = new JPanel();
+        panelBrush.setBounds(1000, 10, 150, 130);
+        panelBrush.setLayout(null);
+        panelBrush.setOpaque(true);
+        add(panelBrush);
+        panel.add(panelBrush);
+
+        Button changedBrush = new Button("Brush Circle");
+        changedBrush.setBounds(20, 10, 110, 35);
+        changedBrush.setFont(new Font("Arial", Font.BOLD, 15));
+        changedBrush.setForeground(Color.BLACK);
+        changedBrush.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                isDrawingCircle = true;
+                isDrawingRectangle = false;
+            }
+        });
+        panelBrush.add(changedBrush);
+
+        Button changedBrushLine = new Button("Brush Line");
+        changedBrushLine.setBounds(20, 46, 110, 35);
+        changedBrushLine.setFont(new Font("Arial", Font.BOLD, 15));
+
+        changedBrushLine.setForeground(Color.BLACK);
+        changedBrushLine.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                isDrawingCircle = false;
+                isDrawingRectangle = false;
+            }
+        });
+        panelBrush.add(changedBrushLine);
+
+        Button changedBrushRectangle = new Button("Brush Rectan");
+        changedBrushRectangle.setBounds(20, 80, 110, 35);
+        changedBrushRectangle.setFont(new Font("Arial", Font.BOLD, 15));
+
+        changedBrushRectangle.setForeground(Color.BLACK);
+        changedBrushRectangle.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                isDrawingRectangle = true;
+                isDrawingCircle = false;
+
+            }
+        });
+        panelBrush.add(changedBrushRectangle);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         setVisible(true);
     }
 
@@ -365,6 +446,9 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
                 color = colorB;
                 bigButton.setColor(color);
                 bigButton.repaint();
+                Color color2 = bigButton.getColor();
+                panelBrush.setBorder(BorderFactory.createLineBorder(color2, 1));
+                panelBrush.repaint();
 
             }
         });
@@ -391,6 +475,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
     }
 
 
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
     }
@@ -400,13 +486,23 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         if (!isDragging) {
             Graphics2D g = (Graphics2D) getGraphics();
             g.setColor(color);
-            if (x != 0 && y != 0) {
+            if (x != 0 && y != 0 && isDrawingCircle && !isDrawingRectangle){
+                g.setStroke(new BasicStroke(lineWidth));
+                g.drawOval(x, y, e.getX(), e.getY());
+            }
+            if (x != 0 && y != 0 && !isDrawingCircle && !isDrawingRectangle) {
                 g.setStroke(new BasicStroke(lineWidth));
                 g.drawLine(x, y, e.getX(), e.getY());
 
             }
+            if (x != 0 && y != 0 && !isDrawingCircle && isDrawingRectangle) {
+                g.setStroke(new BasicStroke(lineWidth));
+                g.drawRect(x, y, e.getX(), e.getY());
+
+            }
             x = e.getX();
             y = e.getY();
+
         }
 
     }
