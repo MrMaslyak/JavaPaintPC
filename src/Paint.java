@@ -32,7 +32,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
     private boolean isDrawingRectangle;
     private JPanel panelBrush;
     private JPanel panelKey;
-    JLabel labelForMassege;
+    private JLabel labelForMassege;
+    private Font fontForMassage;
 
     public void setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
@@ -108,8 +109,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         Button bFill = this.createButtonKey("F", 30, 10);
         bFill.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Paint.this.getContentPane().setBackground(Paint.this.bigButton.getColor());
-                Paint.this.getContentPane().setForeground(Paint.this.bigButton.getColor());
+                Paint.this.getContentPane().setBackground(bigButton.getColor());
+                Paint.this.getContentPane().setForeground(bigButton.getColor());
                 Paint.this.repaint();
             }
         });
@@ -134,20 +135,24 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         this.add(bPencil);
         panel.add(bPencil);
         this.panelKey.add(bPencil);
+
         final JTextField textField = new JTextField();
         textField.setBounds(230, 22, 150, 75);
         this.add(textField);
         panel.add(textField);
+
         JLabel message = new JLabel("Text");
         message.setFont(new Font("Arial", Font.ITALIC, 17));
         message.setBounds(290, 93, 80, 23);
         this.add(message);
         panel.add(message);
+
         JLabel textCoordinatX = new JLabel("X");
         textCoordinatX.setFont(new Font("Arial", Font.ITALIC, 12));
         textCoordinatX.setBounds(238, 133, 20, 20);
         this.add(textCoordinatX);
         panel.add(textCoordinatX);
+
         this.textValueCoordinatX = new JLabel("0");
         this.textValueCoordinatX.setFont(new Font("Arial", Font.ITALIC, 23));
         this.textValueCoordinatX.setBounds(232, 119, 40, 20);
@@ -163,16 +168,19 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         });
         this.add(this.scrollBarCoordinatX);
         panel.add(this.scrollBarCoordinatX);
+
         JLabel textCoordinatY = new JLabel("Y");
         textCoordinatY.setFont(new Font("Arial", Font.ITALIC, 12));
         textCoordinatY.setBounds(360, 133, 20, 20);
         this.add(textCoordinatY);
         panel.add(textCoordinatY);
+
         this.textValueCoordinatY = new JLabel("0");
         this.textValueCoordinatY.setFont(new Font("Arial", Font.ITALIC, 23));
         this.textValueCoordinatY.setBounds(340, 119, 40, 20);
         this.add(this.textValueCoordinatY);
         panel.add(this.textValueCoordinatY);
+
         this.scrollBarCoordinatY = new JScrollBar(Adjustable.HORIZONTAL, 0, 0, 0, 999);
         this.scrollBarCoordinatY.setBounds(340, 98, 40, 20);
         this.scrollBarCoordinatY.addAdjustmentListener(new AdjustmentListener() {
@@ -183,6 +191,48 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         });
         this.add(this.scrollBarCoordinatY);
         panel.add(this.scrollBarCoordinatY);
+
+
+        JButton bChangeFont = new JButton("Bold");
+        bChangeFont.setBounds(1175, 10, 70, 35);
+        bChangeFont.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fontForMassage = new Font("Arial", Font.BOLD, fontSize);
+                labelForMassege.setFont(fontForMassage);
+            }
+        });
+        this.add(bChangeFont);
+        panel.add(bChangeFont);
+
+        JButton bChangeFontItalic = new JButton("Italic");
+        bChangeFontItalic.setBounds(1175, 50, 70, 35);
+        bChangeFontItalic.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fontForMassage = new Font("Arial", Font.ITALIC, fontSize);
+                labelForMassege.setFont(fontForMassage);
+            }
+        });
+        this.add(bChangeFontItalic);
+        panel.add(bChangeFontItalic);
+
+        JButton bChangeFontPlain = new JButton("Plain");
+        bChangeFontPlain.setBounds(1175, 90, 70, 35);
+        bChangeFontPlain.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fontForMassage = new Font("Arial", Font.PLAIN, fontSize);
+                labelForMassege.setFont(fontForMassage);
+            }
+        });
+        this.add(bChangeFontPlain);
+        panel.add(bChangeFontPlain);
+
+        JLabel textFontStyle = new JLabel("Font style");
+        textFontStyle.setFont(new Font("Arial", Font.ITALIC, 15));
+        textFontStyle.setBounds(1178, 121, 100, 30);
+        this.add(textFontStyle);
+        panel.add(textFontStyle);
+
+
         Button bText = new Button("Send");
         bText.setBounds(275, 117, 60, 30);
         bText.addActionListener(new ActionListener() {
@@ -190,31 +240,33 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
                 String text = textField.getText();
                 textField.setText("");
                 if (!text.isEmpty()) {
-                    Paint.this.labelForMassege = new JLabel();
-                    Paint.this.labelForMassege.setBounds(Paint.this.xCoordinat, Paint.this.yCoordinat + 160, 300, 40);
-                    Paint.this.labelForMassege.setFont(new Font("Arial", Font.ITALIC, 22));
-                    Paint.this.labelForMassege.setText(text);
-                    Paint.this.getContentPane().add(Paint.this.labelForMassege);
-                    Paint.this.points.add(Paint.this.labelForMassege);
-                    Paint.this.xCoordinat = 0;
-                    Paint.this.textValueCoordinatX.setText("0");
-                    Paint.this.textValueCoordinatY.setText("0");
-                    Paint.this.scrollBarCoordinatX.setValue(0);
-                    Paint.this.scrollBarCoordinatY.setValue(0);
-                    Paint.this.repaint();
+                    labelForMassege = new JLabel();
+                    labelForMassege.setBounds(xCoordinat, yCoordinat + 160, 300, 40);
+                    labelForMassege.setFont(fontForMassage);
+                    labelForMassege.setText(text);
+                    getContentPane().add(Paint.this.labelForMassege);
+                    points.add(Paint.this.labelForMassege);
+                    xCoordinat = 0;
+                    textValueCoordinatX.setText("0");
+                    textValueCoordinatY.setText("0");
+                    scrollBarCoordinatX.setValue(0);
+                    scrollBarCoordinatY.setValue(0);
+                    repaint();
                 }
             }
         });
         this.add(bText);
         panel.add(bText);
-        final JLabel textValue = new JLabel("0");
+
+
+        JLabel textValue = new JLabel("0");
         textValue.setFont(new Font("Arial", Font.ITALIC, 30));
         textValue.setBounds(385, 60, 55, 30);
-        this.add(textValue);
+        add(textValue);
         panel.add(textValue);
         JScrollBar scrollBar = new JScrollBar(Adjustable.VERTICAL, 0, 0, 0, 99);
         scrollBar.setBounds(420, 20, 20, 100);
-        this.isDragging = true;
+        isDragging = true;
         scrollBar.addAdjustmentListener(new AdjustmentListener() {
             public void adjustmentValueChanged(AdjustmentEvent e) {
                 Paint.this.lineWidth = e.getValue();
@@ -224,24 +276,29 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         });
         this.add(scrollBar);
         panel.add(scrollBar);
+
         JLabel textValueValue = new JLabel("Value");
         textValueValue.setFont(new Font("Arial", Font.ITALIC, 15));
         textValueValue.setBounds(412, 115, 100, 30);
         this.add(textValueValue);
         panel.add(textValueValue);
+
         JLabel textColor = new JLabel("Color");
         textColor.setFont(new Font("Arial", Font.ITALIC, 15));
         textColor.setBounds(690, 95, 100, 30);
         this.add(textColor);
         panel.add(textColor);
+
         JLabel textClear = new JLabel("Clear");
         textClear.setFont(new Font("Arial", Font.ITALIC, 15));
         textClear.setBounds(912, 95, 100, 30);
         this.add(textClear);
         panel.add(textClear);
-        this.bigButton = this.createBigButton();
-        this.add(this.bigButton);
+
+        bigButton = this.createBigButton();
+        add(this.bigButton);
         panel.add(this.bigButton);
+
         CircleButton bIndigo = this.createButton(Color.decode("#4B0082"), 630, 25);
         this.add(bIndigo);
         panel.add(bIndigo);
@@ -368,6 +425,8 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         this.isDragging = true;
         this.add(labelVolumeText);
         panel.add(labelVolumeText);
+
+
         JScrollBar scrollBarVolumeText = new JScrollBar(Adjustable.HORIZONTAL, 0, 0, 0, 99);
         scrollBarVolumeText.setBounds(235, 3, 100, 20);
         this.isDragging = true;
@@ -381,12 +440,16 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         });
         this.add(scrollBarVolumeText);
         panel.add(scrollBarVolumeText);
+
+
         JLabel labelSizeText = new JLabel("Size text");
         labelSizeText.setBounds(370, 3, 60, 20);
         labelSizeText.setFont(new Font("Arial", Font.ITALIC, 15));
         this.isDragging = true;
         this.add(labelSizeText);
         panel.add(labelSizeText);
+
+
         this.setVisible(true);
     }
 
@@ -397,6 +460,7 @@ public class Paint extends JFrame implements ActionListener, MouseMotionListener
         int height = metrics.getHeight();
         label.setSize(label.getWidth(), height);
     }
+
 
     private CircleButton createButton(final Color colorB, int x, int y) {
         this.isDragging = true;
